@@ -1,0 +1,22 @@
+---
+- name: Restart Tomcat 
+  hosts: prod
+  become: yes
+  become_method: sudo
+
+  vars:
+   tomcat_home: /apps/server
+   tomcat_path: /apps/server/bin
+  
+  tasks:
+  - name: stop tomcat service
+    shell: "{{tomcat_path}}/shutdown.sh"
+    become_user: tomcat
+  
+  - name: sleep for 20 seconds
+    shell: sleep 20
+
+  - name: start and enable tomcat service
+    shell: " nohup {{tomcat_path}}/startup.sh"
+    become_user: tomcat
+  
